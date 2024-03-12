@@ -7,7 +7,13 @@ In this project I will try to add create a LLM chat with web search automatic da
 #### TODO
 
 * [ ] Documentation.
+  * [X] Installation with requirements.txt.
+  * [ ] Usage.
 * [X] Web search dataset.
 * [X] Gradio chat interface.
 * [X] RAG implementation.
-* [ ] Chat web search and filter.
+  * [X] PDF document.
+  * [X] CSV formated data.
+  * [ ] Web search.
+  * [ ] Youtube video channel.
+  * [ ] Twitch channel.

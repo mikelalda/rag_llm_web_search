@@ -1,8 +1,17 @@
-requests==2.22.0
-faiss-cpu==1.7.4
-duckduckgo-search==4.1.0
-beautifulsoup4==4.12.2
-langchain==0.0.352
-unstructured==0.6.6
-rank_bm25==0.2.2
-sentence-transformers==2.2.2
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch
+torchvision
+torchaudio
+requests
+faiss-cpu
+duckduckgo-search
+beautifulsoup4
+langchain
+unstructured
+rank_bm25
+sentence-transformers
+PyPDF2
+langchain-community
+gradio
+accelerate
+bitsandbytes
