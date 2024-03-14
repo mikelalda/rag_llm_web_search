@@ -1,2 +1,8 @@
 /__pycache__/
 web_search_results*
+config*
+/logs/
+*.ini
+/processed/
+/recorded/
+/data/

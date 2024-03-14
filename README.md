@@ -10,6 +10,9 @@ In this project I will try to add create a LLM chat with web search automatic da
   * [X] Installation with requirements.txt.
   * [ ] Usage.
 * [X] Web search dataset.
+* [X] Twitch video transcription
+* [] Youtube video transcription
+* [] Email analysis with Gmail
 * [X] Gradio chat interface.
 * [X] RAG implementation.
   * [X] PDF document.
@@ -17,3 +20,4 @@ In this project I will try to add create a LLM chat with web search automatic da
   * [ ] Web search.
   * [ ] Youtube video channel.
   * [ ] Twitch channel.
+  * [ ] Gmail automatic response.
