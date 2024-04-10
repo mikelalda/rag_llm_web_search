@@ -15,14 +15,13 @@ LICENSE = """
 Depending on the model selection.
 """
 if not torch.cuda.is_available():
-    DESCRIPTION += "\n<p>Running on CPU 🥶 This demo does not work on CPU.</p>"
+    DESCRIPTION += "\n<p>Running on CPU 🥶 This demo may not work on CPU.</p>"
 
 else:
     count = torch.cuda.device_count()
     names = dict()
     for i in range(count):
         names[str(i)]=torch.cuda.get_device_name(i)
-    print(names)
     # torch.cuda.set_device(0)
     torch.cuda.empty_cache()
     DESCRIPTION += "\n<p>Running on GPU 🥳</p>"
@@ -30,42 +29,38 @@ else:
 chat_llm = RAG_LLM()
 chat_llm.start()
 
-
 def load_twitch_data():
     return
 
-def load_data(data_file,tokenizer,model):
-    chat_llm.load_data(data_file,tokenizer,model)
+def load_data(data_file):
+    chat_llm.load_data(data_file)
     if chat_llm.status == 0:
         exit()
 
 def respond_chat(history, msg):
     chat_llm.msg=msg
     chat_llm.respond()
-    history += chat_llm.response
+    history.append((msg, chat_llm.response))
     if chat_llm.status.value == 0:
         exit()
-    return history, history, ''
+    return history, ''
 
 def interface():
-    history = gr.Textbox(label="history", visible=False)
-    tokenizer = gr.Textbox(label="tokenizer", value="microsoft/phi-2", visible=False)
-    model = gr.Textbox(label="model", value="microsoft/phi-2", visible=False)
+    model = gr.Textbox(label="model", value="mistral", visible=False)
     with gr.Tab("Text2text"):
         with gr.Row("Input selection"):
             data_file = gr.File(type="filepath", label="Upload file for data analysis")   
         with gr.Row("Output ppt"):
             msg = gr.Textbox(label="Prompt") 
 
-    msg.submit(fn=respond_chat, inputs=[history, msg], outputs=[history, chatbot, msg])
-    data_file.change(fn=load_data, inputs=[data_file,tokenizer,model])
+    msg.submit(fn=respond_chat, inputs=[chatbot, msg], outputs=[chatbot, msg])
+    data_file.change(fn=load_data, inputs=[data_file])
         
 
 
 
 with gr.Blocks(css="style.css") as demo:
     gr.Markdown(DESCRIPTION)
-    gr.DuplicateButton(value="Duplicate Space for private use", elem_id="duplicate-button")
     chatbot = gr.Chatbot()
     interface()
     gr.Markdown(LICENSE)
