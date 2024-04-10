@@ -2,7 +2,7 @@
 
 ## RAG LLM with web search
 
-In this project I will try to add create a LLM chat with web search automatic dataset. After that try to create a chat with web search.
+In this project I will try to add create a LLM chat with RAG system to update data knowledge. After that try to create a chat with web search.
 
 #### TODO
 
@@ -20,6 +20,8 @@ In this project I will try to add create a LLM chat with web search automatic da
   * [X] PDF document.
   * [X] CSV formated data.
   * [ ] Web search.
-  * [ ] Youtube video channel.
+  * [ ] Youtube video.
+  * [ ] Twitch video.
+  * [ ] Youtube channel.
   * [ ] Twitch channel.
   * [ ] Gmail automatic response.

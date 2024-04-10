@@ -297,6 +297,7 @@ def main(argv):
     usage_message = "twitch-recorder.py -u <username> -q <quality>"
     logging.basicConfig(filename="logs/twitch-recorder.log", level=logging.INFO)
     logging.getLogger().addHandler(logging.StreamHandler())
+    logging.info("Starting de app at %s_%s", datetime.date.fromisoformat('2019-12-04'), datetime.datetime.now().strftime("%H:%M:%S"))
 
     try:
         opts, args = getopt.getopt(argv, "hu:q:l:", ["username=", "quality=", "log=", "logging=", "disable-ffmpeg"])

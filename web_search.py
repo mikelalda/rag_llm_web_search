@@ -4,11 +4,20 @@ from bs4 import BeautifulSoup
 from web_search import *
 from argparse import ArgumentParser
 import csv
+from threading import Thread
+import logging
+import datetime
 
-class WebSearcher:
-    def __init__(self, input_file, output_file):
+class WebSearcher(Thread):
+    def __init__(self, input_file, output_file, max_results: int = 10):
+        Thread.__init__(self)
         self.input_file = input_file
         self.output_file = output_file
+        self.max_results = max_results
+
+        logging.basicConfig(filename="logs/web_search.log", level=logging.INFO)
+        # logging.getLogger().addHandler(logging.StreamHandler())
+        logging.info("Starting de app at %s_%s", datetime.date.fromisoformat('2019-12-04'), datetime.datetime.now().strftime("%H:%M:%S"))
 
     def search_duckduckgo(self, search: str, max_results: int, instant_answers: bool = True,
                         regular_search_queries: bool = True, get_website_content: bool = False) -> list[dict]:
@@ -56,23 +65,22 @@ class WebSearcher:
         return '\n'.join([s.strip() for s in strings])
 
     def search(self):
-        with open(self.input_file, newline='') as csvfile:
-            with open(self.output_file, 'w', newline='') as results:
-                reader = csv.reader(csvfile)
-                fieldnames = ['search','title', 'body', 'href']
-                writer = csv.DictWriter(results, fieldnames=fieldnames)
-                writer.writeheader()
-                for row in reader:
-                    [writer.writerow({k:v.encode('utf8') for k,v in i.items()}) for i in self.search_duckduckgo(search=u"  ".join(row),max_results=15, get_website_content=True)]
+        with open(self.output_file, 'w', newline='') as results:
+            fieldnames = ['search','title', 'body', 'href']
+            writer = csv.DictWriter(results, fieldnames=fieldnames)
+            writer.writeheader()
+            [writer.writerow({k:v.encode('utf8') for k,v in i.items()}) for i in self.search_duckduckgo(search=u"".join(self.input_file),max_results=self.max_results, get_website_content=True)]
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("-i", "--input", dest="input", help="Input a csv file for the scraper", default="data/web_search_input.csv")
+    parser.add_argument("-i", "--input", dest="input", help="Input a text for the scraper", default="Como hacer un diccionario en Python")
     parser.add_argument("-o", "--output", dest="output", help="Output a csv file with results", default="data/web_search_output.csv")
+    parser.add_argument("-m", "--max_results", dest="max_results", help="Maximum results for each row", default=5)
     args = parser.parse_args()
 
     if(args.input == None or args.output == None):
         print("Please provide a query")
     else:
-        websearch = WebSearcher(args.input, args.output)
+        websearch = WebSearcher(args.input, args.output, args.max_results)
+        websearch.start()
         websearch.search()

@@ -40,8 +40,8 @@ class RAG_LLM(Thread):
         self.response = ''
         
         logging.basicConfig(filename="logs/rag_llm.log", level=logging.INFO)
-        logging.getLogger().addHandler(logging.StreamHandler())
-        logging.info("Starting de app at %s", datetime.datetime.now().strftime("%Hh%Mm%Ss"))
+        # logging.getLogger().addHandler(logging.StreamHandler())
+        logging.info("Starting de app at %s_%s", datetime.date.fromisoformat('2019-12-04'), datetime.datetime.now().strftime("%H:%M:%S"))
         
     def load_data(self, dataset, tokenizer, model):
         try:
