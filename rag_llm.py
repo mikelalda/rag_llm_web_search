@@ -28,7 +28,7 @@ class LLMStatus(enum.Enum):
     STOPPED = 4
 
 class RAG_LLM(Thread):
-    def __init__(self):
+    def __init__(self, model):
         Thread.__init__(self)
         self.status = LLMStatus.INITIALIZING
         self.qa = None
@@ -41,7 +41,8 @@ class RAG_LLM(Thread):
             model_kwargs=model_kwargs, 
             encode_kwargs=encode_kwargs 
             )
-        self.model = ChatOllama(model="mistral")
+        self.model = ChatOllama(model=model)
+        self.pipe = Ollama(model=model)
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1024, chunk_overlap=100)
         self.prompt = PromptTemplate.from_template(
             """
@@ -60,7 +61,9 @@ class RAG_LLM(Thread):
         # logging.getLogger().addHandler(logging.StreamHandler())
         logging.info("Starting de app at %s_%s", datetime.date.fromisoformat('2019-12-04'), datetime.datetime.now().strftime("%H:%M:%S"))
         self.status = LLMStatus.RUNNING
-        
+    def model_change(self, model):
+        self.model = ChatOllama(model=model)
+        self.pipe = Ollama(model=model)
     def load_data(self, dataset):
         try:
             logging.info('Loading data, please wait...')
@@ -99,8 +102,7 @@ class RAG_LLM(Thread):
         try:
             if self.status == LLMStatus.RUNNING:
                 if self.qa == None:
-                    pipe = Ollama(model="llama2")
-                    self.response = pipe.invoke(self.msg)
+                    self.response = self.pipe.invoke(self.msg)
                 else:
                     self.chain = ({"context": self.db, "question": RunnablePassthrough()}
                       | self.prompt 
